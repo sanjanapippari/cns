@@ -1,0 +1,32 @@
+import java.util.Scanner;
+
+public class DiffieHellmanExample
+{
+    public static void main(String[] args)
+ {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a prime number (p): ");
+        int p = sc.nextInt();
+        System.out.print("Enter a primitive root of p (g): ");
+        int g = sc.nextInt();
+        System.out.print("Enter Alice's private key (a): ");
+        int a = sc.nextInt();
+        System.out.print("Enter Bob's private key (b): ");
+        int b = sc.nextInt();
+        int A = (int) (Math.pow(g, a) % p); 
+        int B = (int) (Math.pow(g, b) % p); 
+        System.out.println("\nPublicly shared keys:");
+        System.out.println("Alice's public key (A): " + A);
+        System.out.println("Bob's public key (B): " + B);
+        int keyA = (int) (Math.pow(B, a) % p); 
+        int keyB = (int) (Math.pow(A, b) % p); 
+        System.out.println("\nShared Secret Key computed by Alice: " + keyA);
+        System.out.println("Shared Secret Key computed by Bob: " + keyB);
+        if (keyA == keyB)
+{
+            System.out.println("\nKeys match! Secure communication established.");
+        } else {
+            System.out.println("\nKeys do not match. Something went wrong!");
+        }
+    }
+}
