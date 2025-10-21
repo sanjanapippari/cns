@@ -1,0 +1,36 @@
+import java.security.*;
+import java.util.Scanner;
+
+public class DigitalSignatureExample {
+    public static void main(String[] args) {
+        try {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Enter text to sign: ");
+            String message = sc.nextLine();
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
+            keyGen.initialize(2048);
+            KeyPair keyPair = keyGen.generateKeyPair();
+            PrivateKey privateKey = keyPair.getPrivate();
+            PublicKey publicKey = keyPair.getPublic();
+            Signature signature = Signature.getInstance("SHA256withDSA");
+            signature.initSign(privateKey);
+            signature.update(message.getBytes());
+            byte[] digitalSignature = signature.sign();
+            System.out.println("\nDigital Signature (in hex):");
+            StringBuilder hexSig = new StringBuilder();
+            for (byte b : digitalSignature) {
+                hexSig.append(String.format("%02x", b));
+            }
+            System.out.println(hexSig.toString());
+            Signature verifySig = Signature.getInstance("SHA256withDSA");
+            verifySig.initVerify(publicKey);
+            verifySig.update(message.getBytes());
+            boolean isVerified = verifySig.verify(digitalSignature);
+
+            System.out.println("\nVerification: " + (isVerified ? "Signature is valid " : "Signature is invalid "));
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
+
